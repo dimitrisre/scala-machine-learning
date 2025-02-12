@@ -6,7 +6,7 @@ val sparkVersion = "3.5.1"
 
 lazy val root = (project in file("."))
   .settings(
-    name := "Scala-machine-learning",
+    name := "scala-machine-learning",
     libraryDependencies ++= Seq(
       "org.apache.spark" %% "spark-core" % sparkVersion,
       "org.apache.spark" %% "spark-sql" % sparkVersion,
