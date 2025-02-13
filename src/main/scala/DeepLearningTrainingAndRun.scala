@@ -110,11 +110,19 @@ object DeepLearningTrainingAndRun {
       trainingDatasetIt.reset()
       testDatasetIt.reset()
 
+      if(eval.accuracy() >= 0.99) {
+        println("Model has reached 99% accuracy. Stopping training")
+        saveModel(model, "models/cancer_prediction/model")
+        return
+      }
       println(s"Epoch $j finished")
     }
 
-    println("Saving model to: models/cancer_prediction/model")
-    model.save(new File("models/cancer_prediction/model"))
+  }
+
+  def saveModel(model: MultiLayerNetwork, path: String): Unit = {
+    println(s"Saving model to: $path")
+    model.save(new File(path) ,true)
     println("Model Saved")
   }
 
