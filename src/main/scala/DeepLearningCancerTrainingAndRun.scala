@@ -19,7 +19,7 @@ import org.nd4j.linalg.lossfunctions.LossFunctions.LossFunction
 import java.io.File
 import scala.util.Random
 
-object DeepLearningTrainingAndRun {
+object DeepLearningCancerTrainingAndRun {
 
   def main(args: Array[String]): Unit = {
     //Dataset preparation

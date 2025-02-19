@@ -10,7 +10,7 @@ import spire.macros.Checked.option
 
 import java.io.File
 
-object DeepLearning {
+object DeepLearningCancer {
   def main(args: Array[String]): Unit = {
     val spark = SparkSession
       .builder()
