@@ -15,10 +15,10 @@ lazy val root = (project in file("."))
       "org.apache.spark" %% "spark-yarn" % sparkVersion,
       "org.apache.spark" %% "spark-network-shuffle" % sparkVersion,
       "com.crealytics" %% "spark-excel" % "3.5.1_0.20.4",
-      "org.deeplearning4j" % "deeplearning4j-core" % "1.0.0-beta7",
-      "org.nd4j" % "nd4j-native-platform" % "1.0.0-beta7",
-      "org.deeplearning4j" % "arbiter-deeplearning4j" % "1.0.0-beta7",
-      "org.deeplearning4j" % "arbiter-ui" % "1.0.0-beta7",
+      "org.deeplearning4j" % "deeplearning4j-core" % "1.0.0-M2.1",
+      "org.nd4j" % "nd4j-native-platform" % "1.0.0-M2.1",
+//      "org.deeplearning4j" % "arbiter-deeplearning4j" % "1.0.0-beta7",
+//      "org.deeplearning4j" % "arbiter-ui" % "1.0.0-beta7",
       "org.scalanlp" %% "breeze-viz" % "2.1.0"
     )
   )

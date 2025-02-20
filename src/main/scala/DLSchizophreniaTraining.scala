@@ -5,22 +5,8 @@ import org.datavec.api.records.reader.impl.collection.CollectionRecordReader
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader
 import org.datavec.api.split.FileSplit
 import org.datavec.api.writable.{DoubleWritable, Writable}
-import org.deeplearning4j.arbiter.MultiLayerSpace
-import org.deeplearning4j.arbiter.conf.updater.AdamSpace
-import org.deeplearning4j.arbiter.layers.{DenseLayerSpace, OutputLayerSpace}
-import org.deeplearning4j.arbiter.optimize.api.OptimizationResult
-import org.deeplearning4j.arbiter.optimize.api.data.DataSource
-import org.deeplearning4j.arbiter.optimize.api.saving.ResultReference
-import org.deeplearning4j.arbiter.optimize.api.termination.MaxCandidatesCondition
-import org.deeplearning4j.arbiter.optimize.config.OptimizationConfiguration
-import org.deeplearning4j.arbiter.optimize.generator.RandomSearchGenerator
-import org.deeplearning4j.arbiter.optimize.parameter.continuous.ContinuousParameterSpace
-import org.deeplearning4j.arbiter.optimize.parameter.discrete.DiscreteParameterSpace
-import org.deeplearning4j.arbiter.optimize.parameter.integer.IntegerParameterSpace
-import org.deeplearning4j.arbiter.optimize.runner.LocalOptimizationRunner
-import org.deeplearning4j.arbiter.scoring.impl.EvaluationScoreFunction
 import org.deeplearning4j.datasets.datavec.RecordReaderDataSetIterator
-import org.deeplearning4j.datasets.iterator.impl.ListDataSetIterator
+import org.deeplearning4j.datasets.iterator.utilty.ListDataSetIterator
 import org.deeplearning4j.nn.api.{MaskState, OptimizationAlgorithm}
 import org.deeplearning4j.nn.conf.inputs.InputType
 import org.deeplearning4j.nn.conf.{InputPreProcessor, MultiLayerConfiguration, NeuralNetConfiguration, WorkspaceMode}

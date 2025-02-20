@@ -1,3 +1,4 @@
+import org.apache.spark.sql.SparkSession
 import org.datavec.api.records.reader.RecordReader
 import org.datavec.api.records.reader.impl.csv.CSVRecordReader
 import org.datavec.api.split.FileSplit
@@ -10,9 +11,11 @@ import org.deeplearning4j.nn.weights.WeightInit
 import org.deeplearning4j.optimize.listeners.ScoreIterationListener
 import org.nd4j.evaluation.classification.Evaluation
 import org.nd4j.linalg.activations.Activation
-import org.nd4j.linalg.dataset.api
+import org.nd4j.linalg.dataset.{AsyncDataSetIterator, DataSet, api}
 import org.nd4j.linalg.dataset.api.DataSetPreProcessor
 import org.nd4j.linalg.dataset.api.iterator.DataSetIterator
+import org.nd4j.linalg.dataset.api.preprocessor.NormalizerStandardize
+import org.nd4j.linalg.factory.Nd4j
 import org.nd4j.linalg.learning.config.Adam
 import org.nd4j.linalg.lossfunctions.LossFunctions.LossFunction
 
@@ -27,8 +30,8 @@ object DeepLearningCancerTrainingAndRun {
 
     val labelIndex = 20531
     val numClasses = 5
-    val batchSize = 64
-
+    val batchSize = 16
+    val accuracyThreshold = 0.97
 
     def readCSVDataset(csvFileClasspath:String, batchSize:Int, labelIndex:Int, numClasses:Int) = {
       val rr: RecordReader = new CSVRecordReader()
@@ -37,6 +40,7 @@ object DeepLearningCancerTrainingAndRun {
 
       val iterator: DataSetIterator = new RecordReaderDataSetIterator(rr, batchSize, labelIndex, numClasses)
 
+      new AsyncDataSetIterator(iterator, 1)
       iterator
     }
 
@@ -100,7 +104,7 @@ object DeepLearningCancerTrainingAndRun {
     println(s"Total number of network parameters: $totalNumParams")
 
     println("Starting training...")
-    for (j <- 0 until numEpochs) {
+    val bestEval = (0 until numEpochs).map { j =>
       println(s"Epoch $j started")
       model.fit(trainingDatasetIt)
 
@@ -110,14 +114,17 @@ object DeepLearningCancerTrainingAndRun {
       trainingDatasetIt.reset()
       testDatasetIt.reset()
 
-      if(eval.accuracy() >= 0.99) {
-        println("Model has reached 99% accuracy. Stopping training")
-        saveModel(model, "models/cancer_prediction/model")
-        return
-      }
       println(s"Epoch $j finished")
-    }
+      eval
+    }.takeRight(5).filter(_.accuracy() >= accuracyThreshold).maxBy(_.accuracy())
 
+    if(bestEval.accuracy() >= accuracyThreshold) {
+      println(bestEval.stats())
+      println(s"Model reached ${bestEval.accuracy()}. Saving to: models/cancer_prediction/model_${System.currentTimeMillis()}.zip")
+      saveModel(model, s"models/cancer_prediction/model_${System.currentTimeMillis()}.zip")
+    } else {
+      println(s"Will not save model with accuracy: ${bestEval.accuracy()}. Needs optimization")
+    }
   }
 
   def saveModel(model: MultiLayerNetwork, path: String): Unit = {
